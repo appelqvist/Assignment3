@@ -50,7 +50,7 @@ public class Storage {
 
         synchronized (lock) {
             FoodItem item = storage.getLast();
-            if ((item.getVolume() <= maxVolume && item.getWeight() <= maxVolume) && storage.size() <= maxSize) { //Finns plats i lastbilen
+            if ((item.getVolume() <= maxVolume && item.getWeight() <= maxWeight) && storage.size() <= maxSize) { //Finns plats i lastbilen
                 storage.removeLast(); //Tar bort elementet sist
                 inSem.release(); //Tar bort en plats (en mindre vara)
                 return item;
