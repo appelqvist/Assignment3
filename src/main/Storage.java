@@ -12,7 +12,7 @@ import java.util.concurrent.Semaphore;
 public class Storage {
     LinkedList<FoodItem> storage = new LinkedList<FoodItem>();
 
-    private int maxSize = 100;
+    private int maxSize = 20;
     private Semaphore inSem;
     private Semaphore outSem;
 
@@ -28,25 +28,29 @@ public class Storage {
     }
 
     public void put(FoodItem item) {
-        System.out.println("sem1: "+inSem.availablePermits()+"\nsem2: "+outSem.availablePermits());
+
+
         try {
             inSem.acquire();  //Begär för en plats för att kunna lägga in
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
+        while(storage.size() >= maxSize){
+        } //Står och väntar tills de finns plats
+
         synchronized (lock) {
             storage.addFirst(item); //Lägger till i storage
             controller.updateGUIstorageSize(maxSize,storage.size());
         }
 
-        System.out.println("La till: "+item.getName());
+        System.err.println("La till: "+item.getName());
         outSem.release(); //Öppnar upp så dem kan hämta i out
         inSem.release(); //Öppnar upp så de finns plats igen.
     }
 
 
-    public FoodItem get(double maxWeight, double maxVolume) { //Får inte vara större eller tyngre
+    public FoodItem get(double maxWeight, double maxVolume, int maxItem) { //Får inte vara större eller tyngre
 
         try {
             outSem.acquire();  //Begär för en plats om inte vänta
@@ -54,10 +58,11 @@ public class Storage {
             e.printStackTrace();
         }
 
+        System.out.println("Fanns item att ta");
         synchronized (lock) {
             if(storage.size() > 0) {
                 FoodItem item = storage.getLast();
-                if ((item.getVolume() <= maxVolume && item.getWeight() <= maxWeight) && storage.size() <= maxSize) { //Finns plats i lastbilen
+                if (item.getVolume() <= maxVolume && item.getWeight() <= maxWeight && maxItem >= 1) { //Finns plats i lastbilen
                     storage.removeLast(); //Tar bort elementet sist
                     controller.updateGUIstorageSize(maxSize, storage.size());
                     outSem.release(); //Tar bort en plats (en mindre vara)

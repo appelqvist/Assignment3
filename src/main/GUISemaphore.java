@@ -34,6 +34,9 @@ public class GUISemaphore {
     private JButton btnStopB;            // Button stop factory B
     private JButton btnStopA;            // Button stop factory A
 
+
+    private Controller controller;
+
     /**
      * Constructor, creates the window
      */
@@ -162,6 +165,10 @@ public class GUISemaphore {
         addListeners();
     }
 
+    public void setController(Controller controller){
+        this.controller = controller;
+    }
+
     private void addListeners(){
         btnStartA.addActionListener(new ClickListener());
         btnStopA.addActionListener(new ClickListener());
@@ -180,14 +187,28 @@ public class GUISemaphore {
         public void actionPerformed(ActionEvent e) {
             if(e.getSource() == btnStartB){
                 System.out.println("start 1");
+                controller.startFactory(0);
+                btnStartB.setEnabled(false);
+                btnStopB.setEnabled(true);
             }else if(e.getSource() == btnStopB){
                 System.out.println("stop 1");
+                controller.stopFactory(0);
+                btnStartB.setEnabled(true);
+                btnStopB.setEnabled(false);
             }else if(e.getSource() == btnStartA){
                 System.out.println("start 2");
+                controller.startFactory(1);
+                btnStartA.setEnabled(false);
+                btnStopA.setEnabled(true);
             }else if(e.getSource() == btnStopA){
                 System.out.println("stop 2");
+                controller.stopFactory(1);
+                btnStartA.setEnabled(true);
+                btnStopA.setEnabled(false);
             }else if(e.getSource() == btnDeliver){
                 System.out.println("delivery");
+                controller.startDelivery();
+                btnDeliver.setEnabled(false);
             }
         }
     }

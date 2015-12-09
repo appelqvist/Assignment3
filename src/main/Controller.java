@@ -13,27 +13,35 @@ public class Controller {
     public Controller(GUISemaphore gui){
         this.gui = gui;
         this.storage = new Storage(this);
-        factories[0] = new Factory(storage);
-        factories[1] = new Factory(storage);
-        truck = new Truck(storage,9.0,10.0);
-
-        startFactory(0);
-        startFactory(1);
-        truck.startThread();
-        System.out.println("Färdigt");
+        gui.setController(this);
     }
 
     public void updateGUIstorageSize(int maxSize, int currentSize){
-        float procent = (currentSize*100/maxSize);
-        System.out.println("Vad är: "+procent);
-        gui.updateStorageSize(procent);
+        float percent = (currentSize*100/maxSize);
+        gui.updateStorageSize(percent);
     }
 
     public void startFactory(int thread){
-        factories[thread].startThread();
+        if(factories[thread] == null){
+            factories[thread] = new Factory(storage);
+            factories[thread].startThread();
+        }
     }
 
     public void stopFactory(int thread){
         factories[thread].stopThread();
+        factories[thread] = null;
     }
+
+    public void startDelivery(){
+        if(truck == null){
+            truck = new Truck(storage);
+            truck.startThread();
+        }
+    }
+
+    public void setTruckStatus(int statusNbr){
+
+    }
+
 }

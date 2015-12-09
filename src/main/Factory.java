@@ -30,7 +30,7 @@ public class Factory extends Thread {
                 storage.put(randomFood());
 
                 try {
-                    sleep(4000);
+                    sleep(1000);                     //productionstid
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
