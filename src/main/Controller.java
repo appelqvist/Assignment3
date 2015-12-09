@@ -12,15 +12,21 @@ public class Controller {
 
     public Controller(GUISemaphore gui){
         this.gui = gui;
-        this.storage = new Storage();
+        this.storage = new Storage(this);
         factories[0] = new Factory(storage);
         factories[1] = new Factory(storage);
-        truck = new Truck(storage,20.0,15.0);
+        truck = new Truck(storage,9.0,10.0);
 
         startFactory(0);
         startFactory(1);
         truck.startThread();
         System.out.println("Färdigt");
+    }
+
+    public void updateGUIstorageSize(int maxSize, int currentSize){
+        float procent = (currentSize*100/maxSize);
+        System.out.println("Vad är: "+procent);
+        gui.updateStorageSize(procent);
     }
 
     public void startFactory(int thread){

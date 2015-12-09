@@ -5,6 +5,8 @@ package main;
  */
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.*;
 
@@ -156,5 +158,38 @@ public class GUISemaphore {
         btnStopA = new JButton("Stop");
         btnStopA.setBounds(156, 114, 60, 23);
         pnlFooda.add(btnStopA);
+
+        addListeners();
     }
+
+    private void addListeners(){
+        btnStartA.addActionListener(new ClickListener());
+        btnStopA.addActionListener(new ClickListener());
+        btnStartB.addActionListener(new ClickListener());
+        btnStopB.addActionListener(new ClickListener());
+        btnDeliver.addActionListener(new ClickListener());
+    }
+
+    public void updateStorageSize(double sum){
+        System.out.println(sum);
+        bufferStatus.setValue((int)sum);
+    }
+
+    private class ClickListener implements ActionListener{
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if(e.getSource() == btnStartB){
+                System.out.println("start 1");
+            }else if(e.getSource() == btnStopB){
+                System.out.println("stop 1");
+            }else if(e.getSource() == btnStartA){
+                System.out.println("start 2");
+            }else if(e.getSource() == btnStopA){
+                System.out.println("stop 2");
+            }else if(e.getSource() == btnDeliver){
+                System.out.println("delivery");
+            }
+        }
+    }
+
 }

@@ -11,19 +11,24 @@ import java.util.concurrent.Semaphore;
 
 public class Storage {
     LinkedList<FoodItem> storage = new LinkedList<FoodItem>();
-    private int maxSize = 10;
 
+    private int maxSize = 100;
     private Semaphore inSem;
     private Semaphore outSem;
 
+    private Controller controller;
+
     private Object lock = new Object();
 
-    public Storage() {
-        inSem = new Semaphore(2, true); //Skulle vilja sätta denna till 1?
-        outSem = new Semaphore(0);
+    public Storage(Controller controller) {
+        this.controller = controller;
+
+        inSem = new Semaphore(1, true); //Skulle vilja sätta denna till 1?
+        outSem = new Semaphore(-1);
     }
 
     public void put(FoodItem item) {
+        System.out.println("sem1: "+inSem.availablePermits()+"\nsem2: "+outSem.availablePermits());
         try {
             inSem.acquire();  //Begär för en plats för att kunna lägga in
         } catch (InterruptedException e) {
@@ -32,6 +37,7 @@ public class Storage {
 
         synchronized (lock) {
             storage.addFirst(item); //Lägger till i storage
+            controller.updateGUIstorageSize(maxSize,storage.size());
         }
 
         System.out.println("La till: "+item.getName());
@@ -49,14 +55,20 @@ public class Storage {
         }
 
         synchronized (lock) {
-            FoodItem item = storage.getLast();
-            if ((item.getVolume() <= maxVolume && item.getWeight() <= maxWeight) && storage.size() <= maxSize) { //Finns plats i lastbilen
-                storage.removeLast(); //Tar bort elementet sist
-                inSem.release(); //Tar bort en plats (en mindre vara)
-                return item;
-            } else {
+            if(storage.size() > 0) {
+                FoodItem item = storage.getLast();
+                if ((item.getVolume() <= maxVolume && item.getWeight() <= maxWeight) && storage.size() <= maxSize) { //Finns plats i lastbilen
+                    storage.removeLast(); //Tar bort elementet sist
+                    controller.updateGUIstorageSize(maxSize, storage.size());
+                    outSem.release(); //Tar bort en plats (en mindre vara)
+                    return item;
+                } else {
+                    return null;
+                }
+            }else{
                 return null;
             }
+
         }
 
     }

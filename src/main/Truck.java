@@ -63,6 +63,11 @@ public class Truck extends Thread {
     public void run() {
         super.run();
         while (running) {
+            try {
+                sleep(3000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             getItem();
         }
     }
