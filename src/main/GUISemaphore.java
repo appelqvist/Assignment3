@@ -24,11 +24,16 @@ public class GUISemaphore {
     private JLabel lblLimWeight;        // Label showing weight limit
     private JLabel lblLimVolume;        // Label showing volume limit
     private JLabel lblLimNrs;            // Label showing max nr of food
+
+
     private JLabel lblTruckStatus;        // Label showing truck waiting or loading
+
     private JButton btnDeliver;            // Button for starting deliverance
+
     private JLabel lblDeliver;            // Label showing one truck done, hides when next truck arrives
     private JLabel lblBStatus;            // Label showing factory B status: Hidden, working, waiting or stopped
     private JLabel lblAStatus;            // Label showing factory A status: Hidden, working, waiting or stopped
+
     private JButton btnStartB;            // Button start factory B
     private JButton btnStartA;            // Button start factory A
     private JButton btnStopB;            // Button stop factory B
@@ -211,6 +216,24 @@ public class GUISemaphore {
                 btnDeliver.setEnabled(false);
             }
         }
+    }
+
+    public void setTextTruckTextArea(String str){
+        lstTruck.setText(str);
+    }
+
+    public void clearTruckTextArea(){
+        lstTruck.setText("");
+    }
+
+    public void setTruckDel(){
+        lblDeliver.setVisible(true);
+        lblTruckStatus.setVisible(false);
+    }
+
+    public void setTruckWaitingOrLoading(){
+        lblTruckStatus.setVisible(true);
+        lblDeliver.setVisible(false);
     }
 
 }

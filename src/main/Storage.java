@@ -62,7 +62,7 @@ public class Storage {
         synchronized (lock) {
             if(storage.size() > 0) {
                 FoodItem item = storage.getLast();
-                if (item.getVolume() <= maxVolume && item.getWeight() <= maxWeight && maxItem >= 1) { //Finns plats i lastbilen
+                if ( (item.getVolume() <= maxVolume) && (item.getWeight() <= maxWeight) && (maxItem >= 1)) { //Finns plats i lastbilen
                     storage.removeLast(); //Tar bort elementet sist
                     controller.updateGUIstorageSize(maxSize, storage.size());
                     outSem.release(); //Tar bort en plats (en mindre vara)

@@ -7,11 +7,13 @@ import java.util.LinkedList;
  */
 public class Truck extends Thread {
 
+    Controller controller;
+
     private LinkedList<FoodItem> truck = new LinkedList<FoodItem>();
 
-    private double weightLimit = 10;
-    private double volumeLimit = 15;
-    private int itemLimit = 20;
+    private double weightLimit = 7;
+    private double volumeLimit = 12;
+    private int itemLimit = 9;
 
     private double weight;
     private double volume;
@@ -20,8 +22,9 @@ public class Truck extends Thread {
     private boolean running = false;
     private Storage storage;
 
-    public Truck(Storage storage) {
+    public Truck(Storage storage, Controller controller) {
         this.storage = storage;
+        this.controller = controller;
         volume = 0;
         weight = 0;
         items = 0;
@@ -37,6 +40,8 @@ public class Truck extends Thread {
     }
 
     public void getItem() {
+        controller.setTruckStatus(1);
+
         FoodItem item = storage.get(weightLimit-weight, volumeLimit-volume, itemLimit-items);
         if(item != null){
             truck.addFirst(item);
@@ -44,8 +49,11 @@ public class Truck extends Thread {
             volume += item.getVolume();
             items++;
             System.out.println("Tog ur: "+item.getName());
+            controller.currentTruckItems(truck);
         }else{
             System.out.println("Åker iväg -----------------------------------------------------------------------");
+            controller.setTruckStatus(2);
+            controller.currentTruckItems(null);
             deliverFood();
         }
     }
@@ -67,7 +75,7 @@ public class Truck extends Thread {
         super.run();
         while (running) {
             try {
-                sleep(300);
+                sleep(1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
