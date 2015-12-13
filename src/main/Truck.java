@@ -11,9 +11,9 @@ public class Truck extends Thread {
 
     private LinkedList<FoodItem> truck = new LinkedList<FoodItem>();
 
-    private double weightLimit = 7;
-    private double volumeLimit = 12;
-    private int itemLimit = 9;
+    private double weightLimit;
+    private double volumeLimit;
+    private int itemLimit;
 
     private double weight;
     private double volume;
@@ -22,9 +22,12 @@ public class Truck extends Thread {
     private boolean running = false;
     private Storage storage;
 
-    public Truck(Storage storage, Controller controller) {
+    public Truck(Storage storage, Controller controller, double weightLimit, double volumeLimit, int itemLimit) {
         this.storage = storage;
         this.controller = controller;
+        this.weightLimit = weightLimit;
+        this.volumeLimit = volumeLimit;
+        this.itemLimit = itemLimit;
         volume = 0;
         weight = 0;
         items = 0;
@@ -41,8 +44,8 @@ public class Truck extends Thread {
 
     public void getItem() {
         controller.setTruckStatus(1);
-
         FoodItem item = storage.get(weightLimit-weight, volumeLimit-volume, itemLimit-items);
+
         if(item != null){
             truck.addFirst(item);
             weight += item.getWeight();
@@ -52,7 +55,7 @@ public class Truck extends Thread {
             controller.currentTruckItems(truck);
         }else{
             System.out.println("Åker iväg -----------------------------------------------------------------------");
-            controller.setTruckStatus(2);
+            controller.setTruckStatus(0);
             controller.currentTruckItems(null);
             deliverFood();
         }
@@ -74,12 +77,12 @@ public class Truck extends Thread {
     public void run() {
         super.run();
         while (running) {
+            getItem();
             try {
-                sleep(1000);
+                sleep(3000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            getItem();
         }
     }
 }

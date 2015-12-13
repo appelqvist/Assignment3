@@ -26,19 +26,31 @@ public class Controller {
     public void startFactory(int thread) {
         if (factories[thread] == null) {
             factories[thread] = new Factory(storage);
+            factories[thread].setName(""+thread);
             factories[thread].startThread();
+            updateFactoryStatus(thread,true);
         }
     }
 
     public void stopFactory(int thread) {
         factories[thread].stopThread();
+        updateFactoryStatus(thread,false);
         factories[thread] = null;
     }
 
+    public void updateFactoryStatus(int factory, boolean working){
+        gui.setFactoryStatusWorking(factory,working);
+    }
+
     public void startDelivery() {
+        double weightLimit = 7;
+        double volumeLimit = 12;
+        int sizeLimit = 8;
+
         if (truck == null) {
-            truck = new Truck(storage, this);
+            truck = new Truck(storage, this, weightLimit,volumeLimit,sizeLimit);
             truck.startThread();
+            gui.setTruckLimits(weightLimit,volumeLimit,sizeLimit);
         }
     }
 
@@ -46,8 +58,10 @@ public class Controller {
         switch (statusNbr) {
             case 0:
                 gui.setTruckDel();
+                break;
             case 1:
-                gui.setTruckWaitingOrLoading();
+                gui.setTruckStatus("PACKING TRUCK");
+                break;
         }
     }
 

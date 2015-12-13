@@ -24,57 +24,67 @@ public class Storage {
         this.controller = controller;
 
         inSem = new Semaphore(1, true); //Skulle vilja sätta denna till 1?
-        outSem = new Semaphore(-1);
+        outSem = new Semaphore(0);
     }
 
     public void put(FoodItem item) {
-
-
         try {
             inSem.acquire();  //Begär för en plats för att kunna lägga in
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
-        while(storage.size() >= maxSize){
-        } //Står och väntar tills de finns plats
+        while (storage.size() >= maxSize) {
+        }
+
 
         synchronized (lock) {
             storage.addFirst(item); //Lägger till i storage
-            controller.updateGUIstorageSize(maxSize,storage.size());
+            controller.updateGUIstorageSize(maxSize, storage.size());
         }
 
-        System.err.println("La till: "+item.getName());
+        System.err.println("La till: " + item.getName());
         outSem.release(); //Öppnar upp så dem kan hämta i out
         inSem.release(); //Öppnar upp så de finns plats igen.
+        printSemAndSize();
     }
 
 
-    public FoodItem get(double maxWeight, double maxVolume, int maxItem) { //Får inte vara större eller tyngre
+    public void printSemAndSize(){
+        System.out.println("SEMOUT: "+outSem.availablePermits());
+        System.out.println("SIZE: "+storage.size());
+    }
 
+    public FoodItem get(double maxWeight, double maxVolume, int maxItem) { //Får inte vara större eller tyngre
         try {
             outSem.acquire();  //Begär för en plats om inte vänta
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
-        System.out.println("Fanns item att ta");
-        synchronized (lock) {
-            if(storage.size() > 0) {
-                FoodItem item = storage.getLast();
-                if ( (item.getVolume() <= maxVolume) && (item.getWeight() <= maxWeight) && (maxItem >= 1)) { //Finns plats i lastbilen
-                    storage.removeLast(); //Tar bort elementet sist
-                    controller.updateGUIstorageSize(maxSize, storage.size());
-                    outSem.release(); //Tar bort en plats (en mindre vara)
-                    return item;
-                } else {
-                    return null;
+
+        while (true) {
+            synchronized (lock){
+                if(storage.size() > 0){
+                    break;
                 }
-            }else{
+            }
+        }
+
+        synchronized (lock) {
+            FoodItem item = storage.getLast();
+            if ((item.getVolume() <= maxVolume) && (item.getWeight() <= maxWeight) && (maxItem >= 1) || storage.size() == 0 ) { //Finns plats i lastbilen
+                storage.removeLast(); //Tar bort elementet sist
+                controller.updateGUIstorageSize(maxSize, storage.size());
+                printSemAndSize();
+                return item;
+            } else {
+                outSem.release();
+                printSemAndSize();
                 return null;
             }
-
         }
 
     }
 }
+

@@ -120,17 +120,20 @@ public class GUISemaphore {
         lblLimNrs = new JLabel("Max items goes here");
         lblLimNrs.setBounds(20, 109, 200, 13);
         pnlICA.add(lblLimNrs);
-        lblTruckStatus = new JLabel("New Truck: No Items...");
+        lblTruckStatus = new JLabel("NO TRUCK");
         lblTruckStatus.setFont(new Font("Dejavu Sans", Font.PLAIN, 20));
         lblTruckStatus.setBounds(20, 199, 200, 20);
         pnlICA.add(lblTruckStatus);
         btnDeliver = new JButton("Start Deliver");
         btnDeliver.setBounds(17, 239, 109, 23);
         pnlICA.add(btnDeliver);
+
+
         lblDeliver = new JLabel("Truck Delivering");
-        lblDeliver.setFont(new Font("Dejavu Sans", Font.BOLD, 20));
+        lblDeliver.setFont(new Font("Dejavu Sans", Font.BOLD, 10));
         lblDeliver.setForeground(Color.RED);
         lblDeliver.setBounds(133, 237, 200, 25);
+        lblDeliver.setVisible(false);
         pnlICA.add(lblDeliver);
 
         // Static text in Food Factory B
@@ -139,7 +142,7 @@ public class GUISemaphore {
         pnlFoodb.add(lab3);
 
         // and variables used in program, add code/listeners
-        lblBStatus = new JLabel("Producer Status here");
+        lblBStatus = new JLabel("NOT WORKING");
         lblBStatus.setFont(new Font("Dejavu Sans", Font.PLAIN, 20));
         lblBStatus.setBounds(38, 65, 200, 25);
         pnlFoodb.add(lblBStatus);
@@ -148,6 +151,7 @@ public class GUISemaphore {
         pnlFoodb.add(btnStartB);
         btnStopB = new JButton("Stop");
         btnStopB.setBounds(156, 114, 60, 23);
+        btnStopB.setEnabled(false);
         pnlFoodb.add(btnStopB);
 
         // Static text in Food Factory A
@@ -156,7 +160,7 @@ public class GUISemaphore {
         pnlFooda.add(lab4);
 
         // and variables used in program, add code/listeners
-        lblAStatus = new JLabel("Producer Status here");
+        lblAStatus = new JLabel("NOT WORKING");
         lblAStatus.setFont(new Font("Dejavu Sans", Font.PLAIN, 20));
         lblAStatus.setBounds(38, 65, 200, 25);
         pnlFooda.add(lblAStatus);
@@ -165,6 +169,7 @@ public class GUISemaphore {
         pnlFooda.add(btnStartA);
         btnStopA = new JButton("Stop");
         btnStopA.setBounds(156, 114, 60, 23);
+        btnStopA.setEnabled(false);
         pnlFooda.add(btnStopA);
 
         addListeners();
@@ -226,14 +231,34 @@ public class GUISemaphore {
         lstTruck.setText("");
     }
 
-    public void setTruckDel(){
-        lblDeliver.setVisible(true);
-        lblTruckStatus.setVisible(false);
+    public void setTruckLimits(double w, double v, int size){
+        lblLimNrs.setText("Item limit: "+size);
+        lblLimWeight.setText("Weight limit: "+w);
+        lblLimVolume.setText("Volume limit: "+v);
     }
 
-    public void setTruckWaitingOrLoading(){
-        lblTruckStatus.setVisible(true);
+    public void setTruckDel(){
+        lblDeliver.setVisible(true);
+        lblTruckStatus.setText("");
+    }
+
+    public void setTruckStatus(String str){
+        lblTruckStatus.setText(str);
         lblDeliver.setVisible(false);
+    }
+
+    public void setFactoryStatusWorking(int factoryNbr, boolean working){
+        if(factoryNbr == 0){
+            if(working)
+                lblBStatus.setText("WORKING");
+            else
+                lblBStatus.setText("NOT WORKING");
+        }else{
+            if(working)
+                lblAStatus.setText("WORKING");
+            else
+                lblAStatus.setText("NOT WORKING");
+        }
     }
 
 }

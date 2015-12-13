@@ -28,7 +28,6 @@ public class Factory extends Thread {
         while (true) {              //kanske inte såhär.??
             if (running) {
                 storage.put(randomFood());
-
                 try {
                     sleep(1000);                     //productionstid
                 } catch (InterruptedException e) {
