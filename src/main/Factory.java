@@ -2,22 +2,32 @@ package main;
 
 /**
  * Created by Andreas Appelqvist on 2015-12-08.
+ *
+ * Klassen representerar en fabrik som lägger olika maträtter i en storage.
+ *
  */
 public class Factory extends Thread {
     private Storage storage;
     private FoodItem[] items = new FoodItem[20];
     private boolean running;
 
+
     public Factory(Storage storage) {
         this.storage = storage;
         initItems();
     }
 
+    /**
+     * Startar tråden
+     */
     public void startThread() {
         running = true;
         this.start();
     }
 
+    /**
+     * Stannar tråden
+     */
     public void stopThread() {
         running = false;
     }
@@ -37,11 +47,18 @@ public class Factory extends Thread {
         }
     }
 
+    /**
+     * Får en slumpvald maträtt
+     * @return
+     */
     private FoodItem randomFood() {
         int rand = (int) (Math.random()*20);
         return items[rand];
     }
 
+    /**
+     * Initizerar maträtter i en array
+     */
     private void initItems() {
         items[0] = new FoodItem("Julmust", 1.1, 0.5);
         items[1] = new FoodItem("Banan", 0.9, 0.2);

@@ -175,10 +175,17 @@ public class GUISemaphore {
         addListeners();
     }
 
+    /**
+     * Set controller
+     * @param controller
+     */
     public void setController(Controller controller){
         this.controller = controller;
     }
 
+    /**
+     * Lägger till lyssnare
+     */
     private void addListeners(){
         btnStartA.addActionListener(new ClickListener());
         btnStopA.addActionListener(new ClickListener());
@@ -187,11 +194,18 @@ public class GUISemaphore {
         btnDeliver.addActionListener(new ClickListener());
     }
 
+    /**
+     * Uppdaterar storleken på storage och hur mycket som är ledigt
+     * @param sum
+     */
     public void updateStorageSize(double sum){
         System.out.println(sum);
         bufferStatus.setValue((int)sum);
     }
 
+    /**
+     * ClickListener
+     */
     private class ClickListener implements ActionListener{
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -223,30 +237,59 @@ public class GUISemaphore {
         }
     }
 
+    /**
+     * Sätter truck status
+     * @param str
+     */
     public void setTextTruckTextArea(String str){
         lstTruck.setText(str);
     }
 
+    /**
+     * Rensar TruckStatus
+     */
     public void clearTruckTextArea(){
         lstTruck.setText("");
     }
 
+    /**
+     *
+     * Skriver ut Truck limits i gui
+     *
+     * @param w
+     * @param v
+     * @param size
+     */
     public void setTruckLimits(double w, double v, int size){
         lblLimNrs.setText("Item limit: "+size);
         lblLimWeight.setText("Weight limit: "+w);
         lblLimVolume.setText("Volume limit: "+v);
     }
 
+    /**
+     * Visar att lastbilen är på leverans
+     */
     public void setTruckDel(){
         lblDeliver.setVisible(true);
         lblTruckStatus.setText("");
     }
 
+    /**
+     * Sätter truckstatus
+     * @param str
+     */
     public void setTruckStatus(String str){
         lblTruckStatus.setText(str);
         lblDeliver.setVisible(false);
     }
 
+    /**
+     *
+     * Sätter factoryStatus om jobbar (T/F)
+     *
+     * @param factoryNbr
+     * @param working
+     */
     public void setFactoryStatusWorking(int factoryNbr, boolean working){
         if(factoryNbr == 0){
             if(working)

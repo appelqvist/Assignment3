@@ -4,11 +4,13 @@ import java.util.LinkedList;
 
 /**
  * Created by Andreas Appelqvist on 2015-12-08.
+ *
+ * Representerar en lastbil som kan lastas med FoodItem-objekt
+ *
  */
 public class Truck extends Thread {
 
-    Controller controller;
-
+    private Controller controller;
     private LinkedList<FoodItem> truck = new LinkedList<FoodItem>();
 
     private double weightLimit;
@@ -22,6 +24,16 @@ public class Truck extends Thread {
     private boolean running = false;
     private Storage storage;
 
+    /**
+     *
+     * Inizisering
+     *
+     * @param storage
+     * @param controller
+     * @param weightLimit
+     * @param volumeLimit
+     * @param itemLimit
+     */
     public Truck(Storage storage, Controller controller, double weightLimit, double volumeLimit, int itemLimit) {
         this.storage = storage;
         this.controller = controller;
@@ -33,15 +45,18 @@ public class Truck extends Thread {
         items = 0;
     }
 
+    /**
+     * Startar tråden
+     */
     public void startThread() {
         this.running = true;
         this.start();
     }
 
-    public void stopThread() {
-        this.running = false;
-    }
-
+    /**
+     * Lägger ett nytt FoodItem i lastbilen
+     * Om fullt åker och levererar.
+     */
     public void getItem() {
         controller.setTruckStatus(1);
         FoodItem item = storage.get(weightLimit-weight, volumeLimit-volume, itemLimit-items);
@@ -61,6 +76,9 @@ public class Truck extends Thread {
         }
     }
 
+    /**
+     * Levererar varorna
+     */
     public void deliverFood() {
         truck.clear();
         weight = 0;
@@ -79,7 +97,7 @@ public class Truck extends Thread {
         while (running) {
             getItem();
             try {
-                sleep(3000);
+                sleep(500);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
