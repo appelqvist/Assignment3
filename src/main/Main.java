@@ -6,7 +6,7 @@ package main;
  * Klass som startar programmet
  *
  */
-public class Start {
+public class Main {
     public static void main(String[] args)
     {
         GUISemaphore test = new GUISemaphore();

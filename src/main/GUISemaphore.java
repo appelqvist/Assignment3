@@ -60,7 +60,7 @@ public class GUISemaphore {
         initializeGUI();                    // Fill in components
         frame.setVisible(true);
         frame.setResizable(false);            // Prevent user from change size
-        frame.setLocationRelativeTo(null);    // Start middle screen
+        frame.setLocationRelativeTo(null);    // Main middle screen
     }
 
     /**
@@ -124,7 +124,7 @@ public class GUISemaphore {
         lblTruckStatus.setFont(new Font("Dejavu Sans", Font.PLAIN, 20));
         lblTruckStatus.setBounds(20, 199, 200, 20);
         pnlICA.add(lblTruckStatus);
-        btnDeliver = new JButton("Start Deliver");
+        btnDeliver = new JButton("Main Deliver");
         btnDeliver.setBounds(17, 239, 109, 23);
         pnlICA.add(btnDeliver);
 
@@ -146,7 +146,7 @@ public class GUISemaphore {
         lblBStatus.setFont(new Font("Dejavu Sans", Font.PLAIN, 20));
         lblBStatus.setBounds(38, 65, 200, 25);
         pnlFoodb.add(lblBStatus);
-        btnStartB = new JButton("Start Working");
+        btnStartB = new JButton("Main Working");
         btnStartB.setBounds(31, 114, 116, 23);
         pnlFoodb.add(btnStartB);
         btnStopB = new JButton("Stop");
@@ -164,7 +164,7 @@ public class GUISemaphore {
         lblAStatus.setFont(new Font("Dejavu Sans", Font.PLAIN, 20));
         lblAStatus.setBounds(38, 65, 200, 25);
         pnlFooda.add(lblAStatus);
-        btnStartA = new JButton("Start Working");
+        btnStartA = new JButton("Main Working");
         btnStartA.setBounds(31, 114, 116, 23);
         pnlFooda.add(btnStartA);
         btnStopA = new JButton("Stop");
