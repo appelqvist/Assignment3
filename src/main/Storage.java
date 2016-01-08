@@ -50,7 +50,6 @@ public class Storage {
 
         System.err.println("La till: " + item.getName());
         outSem.release(); //Öppnar upp så dem kan hämta i out
-        inSem.release(); //Öppnar upp så de finns plats igen.
         printSemAndSize();
 
     }
@@ -96,7 +95,7 @@ public class Storage {
                 printSemAndSize();
                 return item;
             } else {
-                outSem.release();
+                inSem.release();
                 printSemAndSize();
                 return null;
             }
